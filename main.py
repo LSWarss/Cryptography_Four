@@ -1,20 +1,19 @@
 from fastapi import FastAPI, Request
-from pydantic import BaseModel
 from encryptions.symetric import Symmetric
+from utility import tags_metadata, Message
 
-app = FastAPI()
 symetric = None
 
-class Message(BaseModel):
-    value: str
+app = FastAPI(openapi_tags=tags_metadata)
 
-@app.get("/")
+
+@app.get("/", tags=["Get Methods"])
 async def root(): 
     return {"message": "Hello cryptography 🤖"}
 
 # Symmetric Routes
 
-@app.get("/symmetric/key")
+@app.get("/symmetric/key", tags=["Get Methods", "Symmetric Methods"])
 async def get_key():
     """Returns random symmetric key
 
@@ -23,7 +22,7 @@ async def get_key():
     """
     return Symmetric.generate_key()
 
-@app.post("/symmetric/")
+@app.post("/symmetric/", tags=["Post Methods", "Symmetric Methods"])
 async def post_key(key):
     """Sets symmetric key posted in the reques
 
@@ -37,7 +36,7 @@ async def post_key(key):
     symetric = Symmetric(key)
     return {"message" : "Key set"}
 
-@app.post("/symmetric/encode")
+@app.post("/symmetric/encode", tags=["Post Methods","Symmetric Methods"])
 async def post_symmetric_encode(message : Message):
     """Encrypts message send by a user when symmetric key is set
 
@@ -49,7 +48,7 @@ async def post_symmetric_encode(message : Message):
     """
     return symetric.encode(message.value)
 
-@app.post("/symmetric/decode")
+@app.post("/symmetric/decode", tags=["Post Methods","Symmetric Methods"])
 async def post_symmetric_decode(message : Message):
     """Decrypts encoded message send by a user when symmetric key is set
 
@@ -60,3 +59,78 @@ async def post_symmetric_decode(message : Message):
         str: Decoded string
     """
     return symetric.decode(message.value)
+
+@app.get("/asymmetric/key", tags=["Get Methods","Assymetric Methods"])
+async def get_assymetric_key():
+    """ Returns new public and private key in HEX and sets it up on server
+
+    Returns:
+        [type]: [description]
+    """
+    return "key"
+
+@app.get("/assymentric/key/ssh", tags=["Get Methods","Assymetric Methods"])
+async def get_assymetric_ssh_key():
+    """ Returns public and private key in OpenSSH format
+
+    Returns:
+        [type]: [description]
+    """
+    return "ssh_key"
+
+@app.post("/asymmetric/key", tags=["Post Methods","Assymetric Methods"])
+async def set_assymetric_key():
+    """Sets key on server 
+
+    Returns:
+        [type]: [description]
+    """
+    return {"message": "Key set"}
+
+@app.post("/asymmetric/verify", tags=["Post Methods","Assymetric Methods"])
+async def post_assymetric_verify(message : Message):
+    """ Using the most recent setting of the key, verify if the message was signed by the key
+
+    Args:
+        message (Message): Message to verify
+
+    Returns:
+        [type]: [description]
+    """
+    return {"message": "Key set"}
+
+@app.post("/asymmetric/sign", tags=["Post Methods","Assymetric Methods"])
+async def post_assymetric_sign(message : Message):
+    """ Using the most recent setting of the key, signs the message and returns
+
+    Args:
+        message (Message): Message to sign
+
+    Returns:
+        [type]: [description]
+    """
+    return {"message": "Key set"}
+
+@app.post("/asymmetric/encode", tags=["Post Methods","Assymetric Methods"])
+async def post_assymetric_encode(message : Message):
+    """Encodes message sent to the server
+
+   Args:
+        message (Message): Message to encode
+
+    Returns:
+        [type]: [description]
+    """
+    return {"message": "Key set"}
+
+@app.post("/asymmetric/decode", tags=["Post Methods","Assymetric Methods"])
+async def post_assymetric_decode(message : Message):
+    """Decodes message sent to the server
+
+    Args:
+        message (Message): Message to decode
+
+    Returns:
+        [type]: [description]
+    """
+    return {"message": "Key set"}

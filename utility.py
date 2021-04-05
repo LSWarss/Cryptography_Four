@@ -1,0 +1,13 @@
+from pydantic import BaseModel
+
+# Swagger tags 
+tags_metadata = [
+    {"name": "Get Methods", "description": "To catch them is my real test"},
+    {"name": "Post Methods", "description": "To train them is my cause!"},
+    {"name": "Symmetric Methods", "description": "The best set of methods, look those are even symmetrical!"},
+    {"name": "Assymetric Methods", "description": "Where do you bury people with OCD? In a symmetry!"},
+]
+
+
+class Message(BaseModel):
+    value: str
