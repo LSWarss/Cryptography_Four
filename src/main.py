@@ -56,3 +56,4 @@ async def post_symmetric_decode(message : Message):
         [type]: [description]
     """
     return message
+
