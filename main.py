@@ -1,7 +1,9 @@
 from fastapi import FastAPI, Request
 from pydantic import BaseModel
+from encryptions.symetric import Symmetric
 
 app = FastAPI()
+symetric = None
 
 class Message(BaseModel):
     value: str
@@ -19,7 +21,7 @@ async def get_key():
     Returns:
         HEX: Symmetric Key
     """
-    return "HEX key"
+    return Symmetric.generate_key()
 
 @app.post("/symmetric/")
 async def post_key(key):
@@ -31,6 +33,8 @@ async def post_key(key):
     Returns:
         JSON: Message if the key was succesfully set
     """
+    global symetric
+    symetric = Symmetric(key)
     return {"message" : "Key set"}
 
 @app.post("/symmetric/encode")
@@ -41,11 +45,11 @@ async def post_symmetric_encode(message : Message):
         message (Message): Message base model 
 
     Returns:
-        [type]: [description]
+        bytes: Encoded message in HEX
     """
-    return message
+    return symetric.encode(message.value)
 
-@app.post("/symmetric/encode")
+@app.post("/symmetric/decode")
 async def post_symmetric_decode(message : Message):
     """Decrypts encoded message send by a user when symmetric key is set
 
@@ -53,7 +57,6 @@ async def post_symmetric_decode(message : Message):
         message (Message): Message base model 
 
     Returns:
-        [type]: [description]
+        str: Decoded string
     """
-    return message
-
+    return symetric.decode(message.value)
