@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from encryptions.symetric import Symmetric
 from encryptions.asymetric import Assymetric
-from utility import tags_metadata, Message, Keys
+from utility import tags_metadata, Message, Keys, error_messages
 
 symetric = None
 assymetric = None
@@ -88,7 +88,7 @@ async def get_assymetric_ssh_key():
     return {"Private key": keys["Private key"], "Public key": keys["Public key"]}
 
 @app.post("/asymmetric/key", tags=["Post Methods","Assymetric Methods"], status_code=201)
-async def set_assymetric_key():
+async def set_assymetric_key(keys: Keys):
     """Sets key on server 
 
     Returns:
@@ -96,7 +96,7 @@ async def set_assymetric_key():
     """
     global assymetric
     assymetric = Assymetric()
-
+    assymetric.set_keys(keys.private_key, keys.public_key)
     return {"message": "Keys set"}
 
 @app.post("/asymmetric/verify", tags=["Post Methods","Assymetric Methods"],  status_code=202)
@@ -121,7 +121,7 @@ async def post_assymetric_sign(message : Message):
     Returns:
         [type]: [description]
     """
-    return {"message" : "Message signed with set key"}
+    return {"message" : assymetric.sign(message.value)} if assymetric != None else error_messages["Key not set"]
 
 @app.post("/asymmetric/encode", tags=["Post Methods","Assymetric Methods"],  status_code=202)
 async def post_assymetric_encode(message : Message):
@@ -133,7 +133,7 @@ async def post_assymetric_encode(message : Message):
     Returns:
         [type]: [description]
     """
-    return {"message" : assymetric.encrypt(message.value)} if assymetric != None else {"message" : "Keys not set, try /asymmetric/key first :)"}
+    return {"message" : assymetric.encrypt(message.value)} if assymetric != None else error_messages["Key not set"]
 
 @app.post("/asymmetric/decode", tags=["Post Methods","Assymetric Methods"],  status_code=202)
 async def post_assymetric_decode(message : Message):
@@ -145,4 +145,4 @@ async def post_assymetric_decode(message : Message):
     Returns:
         [type]: [description]
     """
-    return {"message": "Key set"}
+    return {"message" : assymetric.decrypt(message.value)} if assymetric != None else error_messages["Key not set"]

@@ -102,7 +102,7 @@ class Assymetric():
         Returns:
             (str): Decrypted key
         """
-        return self.privateKey.decrypt(text, padding.OAEP(
+        return self.privateKey.decrypt(text.encode('utf-8'), padding.OAEP(
             mgf=padding.MGF1(algorithm=hashes.SHA256()),
             algorithm=hashes.SHA256(),
             label=None
@@ -118,7 +118,7 @@ class Assymetric():
         """
         return self.publicKey.verify(
             signature,
-            message.encode('UTF-8'),
+            message,
             padding.PSS(
                 mgf=padding.MGF1(hashes.SHA256()),
                 salt_length=padding.PSS.MAX_LENGTH
@@ -134,7 +134,7 @@ class Assymetric():
             
         """
         return self.privateKey.sign(
-            message,
+            bytes(message, 'utf-8'),
             padding.PSS(
                 mgf=padding.MGF1(hashes.SHA256()),
                 salt_length=padding.PSS.MAX_LENGTH

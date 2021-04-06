@@ -8,9 +8,18 @@ tags_metadata = [
     {"name": "Assymetric Methods", "description": "Where do you bury people with OCD? In a symmetry!"},
 ]
 
+error_messages = {
+    "Key not set" : {"message" : "Keys not set, try /asymmetric/key first :)"}
+}
+
 class Message(BaseModel):
     value: str
+
+class MessageWithSignature(BaseModel):
+    value : str
+    signature: str
 
 class Keys(BaseModel):
     private_key : str
     public_key : str
+
