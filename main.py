@@ -1,11 +1,14 @@
 from fastapi import FastAPI, Request
 from encryptions.symetric import Symmetric
-from utility import tags_metadata, Message
+from encryptions.asymetric import Assymetric
+from utility import tags_metadata, Message, Keys
 
 symetric = None
+assymetric = None
 
 app = FastAPI(openapi_tags=tags_metadata)
 
+# Root Routes and Utils
 
 @app.get("/", tags=["Get Methods"])
 async def root(): 
@@ -60,6 +63,8 @@ async def post_symmetric_decode(message : Message):
     """
     return symetric.decode(message.value)
 
+# Assymetric Routes
+
 @app.get("/asymmetric/key", tags=["Get Methods","Assymetric Methods"])
 async def get_assymetric_key():
     """ Returns new public and private key in HEX and sets it up on server
@@ -67,16 +72,20 @@ async def get_assymetric_key():
     Returns:
         [type]: [description]
     """
-    return "key"
+    global assymetric
+    assymetric = Assymetric()
+    keys = assymetric.generate_keys()
+    return {"Private key": keys["Private key"], "Public key": keys["Public key"]}
 
-@app.get("/assymentric/key/ssh", tags=["Get Methods","Assymetric Methods"])
+@app.get("/asymmetric/key/ssh", tags=["Get Methods","Assymetric Methods"])
 async def get_assymetric_ssh_key():
     """ Returns public and private key in OpenSSH format
 
     Returns:
         [type]: [description]
     """
-    return "ssh_key"
+    keys = Assymetric.generate_ssh_keys()
+    return {"Private key": keys["Private key"], "Public key": keys["Public key"]}
 
 @app.post("/asymmetric/key", tags=["Post Methods","Assymetric Methods"], status_code=201)
 async def set_assymetric_key():
@@ -85,8 +94,10 @@ async def set_assymetric_key():
     Returns:
         [type]: [description]
     """
+    global assymetric
+    assymetric = Assymetric()
 
-    return {"message": "Key set"}
+    return {"message": "Keys set"}
 
 @app.post("/asymmetric/verify", tags=["Post Methods","Assymetric Methods"],  status_code=202)
 async def post_assymetric_verify(message : Message):
@@ -122,7 +133,7 @@ async def post_assymetric_encode(message : Message):
     Returns:
         [type]: [description]
     """
-    return {"message": "Key set"}
+    return {"message" : assymetric.encrypt(message.value)} if assymetric != None else {"message" : "Keys not set, try /asymmetric/key first :)"}
 
 @app.post("/asymmetric/decode", tags=["Post Methods","Assymetric Methods"],  status_code=202)
 async def post_assymetric_decode(message : Message):

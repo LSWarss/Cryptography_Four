@@ -8,6 +8,9 @@ tags_metadata = [
     {"name": "Assymetric Methods", "description": "Where do you bury people with OCD? In a symmetry!"},
 ]
 
-
 class Message(BaseModel):
     value: str
+
+class Keys(BaseModel):
+    private_key : str
+    public_key : str
