@@ -22,7 +22,7 @@ async def get_key():
     """
     return Symmetric.generate_key()
 
-@app.post("/symmetric/", tags=["Post Methods", "Symmetric Methods"])
+@app.post("/symmetric/", tags=["Post Methods", "Symmetric Methods"],  status_code=201)
 async def post_key(key):
     """Sets symmetric key posted in the reques
 
@@ -36,7 +36,7 @@ async def post_key(key):
     symetric = Symmetric(key)
     return {"message" : "Key set"}
 
-@app.post("/symmetric/encode", tags=["Post Methods","Symmetric Methods"])
+@app.post("/symmetric/encode", tags=["Post Methods","Symmetric Methods"], status_code=202)
 async def post_symmetric_encode(message : Message):
     """Encrypts message send by a user when symmetric key is set
 
@@ -48,7 +48,7 @@ async def post_symmetric_encode(message : Message):
     """
     return symetric.encode(message.value)
 
-@app.post("/symmetric/decode", tags=["Post Methods","Symmetric Methods"])
+@app.post("/symmetric/decode", tags=["Post Methods","Symmetric Methods"],  status_code=202)
 async def post_symmetric_decode(message : Message):
     """Decrypts encoded message send by a user when symmetric key is set
 
@@ -78,16 +78,17 @@ async def get_assymetric_ssh_key():
     """
     return "ssh_key"
 
-@app.post("/asymmetric/key", tags=["Post Methods","Assymetric Methods"])
+@app.post("/asymmetric/key", tags=["Post Methods","Assymetric Methods"], status_code=201)
 async def set_assymetric_key():
     """Sets key on server 
 
     Returns:
         [type]: [description]
     """
+
     return {"message": "Key set"}
 
-@app.post("/asymmetric/verify", tags=["Post Methods","Assymetric Methods"])
+@app.post("/asymmetric/verify", tags=["Post Methods","Assymetric Methods"],  status_code=202)
 async def post_assymetric_verify(message : Message):
     """ Using the most recent setting of the key, verify if the message was signed by the key
 
@@ -97,9 +98,9 @@ async def post_assymetric_verify(message : Message):
     Returns:
         [type]: [description]
     """
-    return {"message": "Key set"}
+    return {"message" : "It was encoded with set key"}
 
-@app.post("/asymmetric/sign", tags=["Post Methods","Assymetric Methods"])
+@app.post("/asymmetric/sign", tags=["Post Methods","Assymetric Methods"],  status_code=202)
 async def post_assymetric_sign(message : Message):
     """ Using the most recent setting of the key, signs the message and returns
 
@@ -109,9 +110,9 @@ async def post_assymetric_sign(message : Message):
     Returns:
         [type]: [description]
     """
-    return {"message": "Key set"}
+    return {"message" : "Message signed with set key"}
 
-@app.post("/asymmetric/encode", tags=["Post Methods","Assymetric Methods"])
+@app.post("/asymmetric/encode", tags=["Post Methods","Assymetric Methods"],  status_code=202)
 async def post_assymetric_encode(message : Message):
     """Encodes message sent to the server
 
@@ -123,7 +124,7 @@ async def post_assymetric_encode(message : Message):
     """
     return {"message": "Key set"}
 
-@app.post("/asymmetric/decode", tags=["Post Methods","Assymetric Methods"])
+@app.post("/asymmetric/decode", tags=["Post Methods","Assymetric Methods"],  status_code=202)
 async def post_assymetric_decode(message : Message):
     """Decodes message sent to the server
 
