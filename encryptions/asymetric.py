@@ -5,6 +5,7 @@ from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.serialization import load_pem_public_key, load_pem_private_key
 from cryptography.exceptions import InvalidSignature
+import hashlib
 
 import base64
 
@@ -91,12 +92,12 @@ class Assymetric():
         Returns:
             (str): Encrypted text in hex
         """
-        return self.publicKey.encrypt(text.encode('utf-8'), padding.OAEP(
+        return self.publicKey.encrypt(base64.b64encode(text.encode('utf-8')), padding.OAEP(
             mgf=padding.MGF1(algorithm=hashes.SHA256()),
             algorithm=hashes.SHA256(),
             label=None)).hex() if self.publicKey != None else "Public key not set, please set the key :)"
 
-    def decrypt(self, text : str): 
+    def decrypt(self, text): 
         """Decrypts text with set key
 
         Args:
@@ -105,13 +106,17 @@ class Assymetric():
         Returns:
             (str): Decrypted key
         """
-        return self.privateKey.decrypt(text.encode('utf-8'), padding.OAEP(
-            mgf=padding.MGF1(algorithm=hashes.SHA256()),
-            algorithm=hashes.SHA256(),
-            label=None
+        print(self.privateKey.key_size)
+        print(len(base64.b64decode(text.encode('utf-8'))))
+        return self.privateKey.decrypt(
+            base64.b64decode(text.encode('utf-8')), 
+            padding.OAEP(
+                mgf=padding.MGF1(algorithm=hashes.SHA256()),
+                algorithm=hashes.SHA256(),
+                label=None
         )) if self.privateKey != None else "Private key not set, please set the key :)"
 
-    def verify(self, signature, message : str):
+    def verify(self, signature, message):
         """Verify if the message was signed with given signature 
 
         Args:
@@ -119,17 +124,24 @@ class Assymetric():
             message (str): Message to verify
 
         """
-        return self.publicKey.verify(
-            signature,
-            message,
-            padding.PSS(
-                mgf=padding.MGF1(hashes.SHA256()),
-                salt_length=padding.PSS.MAX_LENGTH
-            ),
-            hashes.SHA256()
-        ) if self.publicKey != None else "Public key not set, please set the key :)"
+        
+        prehashed_msg = hashlib.sha256(message.encode('ascii')).hexdigest()
+        decoded_sig = base64.b64decode(signature)
+        try:
+            self.publicKey.verify(
+                decoded_sig,
+                bytes(prehashed_msg.encode('ascii')),
+                padding.PSS(
+                    mgf=padding.MGF1(hashes.SHA256()),
+                    salt_length=padding.PSS.MAX_LENGTH
+                ),
+                hashes.SHA256()
+            ) if self.publicKey != None else "Public key not set, please set the key :)"
+            return True
+        except InvalidSignature: 
+            return False
 
-    def sign(self, message: str):
+    def sign(self, message):
         """
 
         Args:
