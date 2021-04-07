@@ -107,9 +107,9 @@ class Assymetric():
             (str): Decrypted key
         """
         print(self.privateKey.key_size)
-        print(len(text))
+        print(len(base64.b64decode(text.encode('utf-8'))))
         return self.privateKey.decrypt(
-            base64.b64decode(text), 
+            base64.b64decode(text.encode('utf-8')), 
             padding.OAEP(
                 mgf=padding.MGF1(algorithm=hashes.SHA256()),
                 algorithm=hashes.SHA256(),

@@ -57,20 +57,20 @@ def test_post_assymetric_sign():
     assert response.status_code == 202
     assert response.json() != None
 
-def test_post_assymetric_encode():
-    response = client.post("/asymmetric/encode", json={"value": test_message})
-    assert response.status_code == 202
-    assert response.json() != {"message" : "Keys not set, try /asymmetric/key first :)"}
-    assert response.json() != None
+# def test_post_assymetric_encode():
+#     response = client.post("/asymmetric/encode", json={"value": test_message})
+#     assert response.status_code == 202
+#     assert response.json() != {"message" : "Keys not set, try /asymmetric/key first :)"}
+#     assert response.json() != None
 
-def test_post_assymetric_decode():
-    response = client.post("/asymmetric/decode", json={"value": test_encrypted_string})
-    assert response.status_code == 202
-    assert response.json() != {"message" : "Keys not set, try /asymmetric/key first :)"}
-    assert response.json() != None
+# def test_post_assymetric_decode():
+#     response = client.post("/asymmetric/decode", json={"value": test_encrypted_string})
+#     assert response.status_code == 202
+#     assert response.json() != {"message" : "Keys not set, try /asymmetric/key first :)"}
+#     assert response.json() != None
 
-def test_post_assymetric_set_key(): 
-    response = client.post("/asymmetric/key", {"private_key":"-----BEGIN RSA PRIVATE KEY-----MIIEpAIBAAKCAQEA0CIQhkdwM0e0ihx8E2tabVBUxvuCfLGiMe+v+h1jCpzkoyyqs0hMCCskKHfGx3O4NqxYtf57ySwEMD2PEC8py7v+YGOVgcUPiDel4V8E/9VMYxkbqhfCTykN/aER5Zh5z0WKrADcnQdknNXHcr3847HZVVNRk2ImfexAjG5TgQqUcKvTTtvoy16gD7qycqRTMifBoM78S/rI6Avd98zKEUvnUkkONSOtAYWoz1TTDECIjRs4/p6p7pGOp/vEXvMlXs8Fdcy/A4BrsBQN1R4VcQmWygO+eAYnKfxu48XO6NoFCNzDF+cicAf0uKF/PD2CAHsoFc5Qq+bOpYWsBGz1+QIDAQABAoIBAQCu4RB1Yy0ZSVSe/1QZlQhD9U1mbAm18CNSRgzc4ThIwI8zs+IyBbss2eLlxc5V5BuShLl9IbiszbkvN2ovtREvSGRyZPpIMWXdlLRia05uD7DBS2V9Q71Wei5xP5ckDTu8NrhP0eGMZ5vYU5/j/1Kvls3/7aQLbFrfT1TlKgYr003u8/AaGetWnfGjFnfdyHufOa8SF9nllTpMyQ9tMnPUiK+lSywur4EKTEJQiuOmG5S1nPPJDALKdoeFsHubo3SM6IYAFzlfpwz7k1P2iWphNFPXowGZYEuLtwzcrFJvACUEGoohStF5Y1+Rg25Hk73ECaKYaKlDPEFAPkA4S6PJAoGBAOuDyey6u7ci76Au9FYFlSrd58/JLK0uleQvVghAGp9QrLO05KYn607GkBzYVRlT2lGpt+2IYmklrTGRfLVn+05K2wOvvTak32MXqPJxeKsxCcVjs61e61O4Ag5mBuchOTiZNACtKV2anV1Assvu75J949z4SYuuuytiRYqcDzG3AoGBAOI8kPnTPXKoRQJFqCzuVgd2VtgY7drUBNZIIkaQvPnI8O37kTJwvylYNraOEO9fwaC9WgJJgQMU2ZshyLOL//ARsFKzNUQliao37EkK7/1QAc2IKZ+WTUzWyJCxZkgZqT2z0w39yKAT9apsP+QTAZyl4SJ5TU8QUTCZKAv0blXPAoGBAL6c0WcJ0zfrzKmGlzawGgSxyRaBKemYlLQ0I5tV1rYuozhnJc/c6zO8vZK6/FUdastBY52aDpwvZDeEGrzvxZOePhiDuc5qLmqTEaf3csSLUe8yPJALDMebW/6vUNLsLtXCGTaa76nUo5x/6rXnUnrr7OpBAbVN3CrGxKXknN+NAoGAN4v9YImADdXI08z8hMOj9cMVgYtlYxQpd99QIxlIfN/cX+IjfUn3dZRGIr5w5AUTyn6TSfp4JaSJ5S//Ui4ukegV7cg4bNn2mgePCUQZNo3dU3R6G8fQhOw7ZGNaJJvAVPkA+e90wfEEoWpgqYQNIkQMKeW0mJP+CzuffIfwSzsCgYB8r48TXYrIgk1WAzYmw3xCqoEG4/WfnkolTTqFoDL8BwevgJKRdNkFSupqzD21dc4JIpNNBbvFs9amJD8zi1Ntv5s826YaZFHPQqVcDAuiwuRiBmETqYr9Wy1V60q2+6YjXFda6Zm0FevGIqVE9UGVLPoxopK1C/r8TiEa5hbUwg==-----END RSA PRIVATE KEY-----",
-    "public_key": "-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0CIQhkdwM0e0ihx8E2tabVBUxvuCfLGiMe+v+h1jCpzkoyyqs0hMCCskKHfGx3O4NqxYtf57ySwEMD2PEC8py7v+YGOVgcUPiDel4V8E/9VMYxkbqhfCTykN/aER5Zh5z0WKrADcnQdknNXHcr3847HZVVNRk2ImfexAjG5TgQqUcKvTTtvoy16gD7qycqRTMifBoM78S/rI6Avd98zKEUvnUkkONSOtAYWoz1TTDECIjRs4/p6p7pGOp/vEXvMlXs8Fdcy/A4BrsBQN1R4VcQmWygO+eAYnKfxu48XO6NoFCNzDF+cicAf0uKF/PD2CAHsoFc5Qq+bOpYWsBGz1+QIDAQAB-----END PUBLIC KEY-----"})
-    assert response.status_code == 201
-    assert response.json() == {"message" : "Key set"}
+# def test_post_assymetric_set_key(): 
+#     response = client.post("/asymmetric/key", {"private_key":"-----BEGIN RSA PRIVATE KEY-----MIIEpAIBAAKCAQEA0CIQhkdwM0e0ihx8E2tabVBUxvuCfLGiMe+v+h1jCpzkoyyqs0hMCCskKHfGx3O4NqxYtf57ySwEMD2PEC8py7v+YGOVgcUPiDel4V8E/9VMYxkbqhfCTykN/aER5Zh5z0WKrADcnQdknNXHcr3847HZVVNRk2ImfexAjG5TgQqUcKvTTtvoy16gD7qycqRTMifBoM78S/rI6Avd98zKEUvnUkkONSOtAYWoz1TTDECIjRs4/p6p7pGOp/vEXvMlXs8Fdcy/A4BrsBQN1R4VcQmWygO+eAYnKfxu48XO6NoFCNzDF+cicAf0uKF/PD2CAHsoFc5Qq+bOpYWsBGz1+QIDAQABAoIBAQCu4RB1Yy0ZSVSe/1QZlQhD9U1mbAm18CNSRgzc4ThIwI8zs+IyBbss2eLlxc5V5BuShLl9IbiszbkvN2ovtREvSGRyZPpIMWXdlLRia05uD7DBS2V9Q71Wei5xP5ckDTu8NrhP0eGMZ5vYU5/j/1Kvls3/7aQLbFrfT1TlKgYr003u8/AaGetWnfGjFnfdyHufOa8SF9nllTpMyQ9tMnPUiK+lSywur4EKTEJQiuOmG5S1nPPJDALKdoeFsHubo3SM6IYAFzlfpwz7k1P2iWphNFPXowGZYEuLtwzcrFJvACUEGoohStF5Y1+Rg25Hk73ECaKYaKlDPEFAPkA4S6PJAoGBAOuDyey6u7ci76Au9FYFlSrd58/JLK0uleQvVghAGp9QrLO05KYn607GkBzYVRlT2lGpt+2IYmklrTGRfLVn+05K2wOvvTak32MXqPJxeKsxCcVjs61e61O4Ag5mBuchOTiZNACtKV2anV1Assvu75J949z4SYuuuytiRYqcDzG3AoGBAOI8kPnTPXKoRQJFqCzuVgd2VtgY7drUBNZIIkaQvPnI8O37kTJwvylYNraOEO9fwaC9WgJJgQMU2ZshyLOL//ARsFKzNUQliao37EkK7/1QAc2IKZ+WTUzWyJCxZkgZqT2z0w39yKAT9apsP+QTAZyl4SJ5TU8QUTCZKAv0blXPAoGBAL6c0WcJ0zfrzKmGlzawGgSxyRaBKemYlLQ0I5tV1rYuozhnJc/c6zO8vZK6/FUdastBY52aDpwvZDeEGrzvxZOePhiDuc5qLmqTEaf3csSLUe8yPJALDMebW/6vUNLsLtXCGTaa76nUo5x/6rXnUnrr7OpBAbVN3CrGxKXknN+NAoGAN4v9YImADdXI08z8hMOj9cMVgYtlYxQpd99QIxlIfN/cX+IjfUn3dZRGIr5w5AUTyn6TSfp4JaSJ5S//Ui4ukegV7cg4bNn2mgePCUQZNo3dU3R6G8fQhOw7ZGNaJJvAVPkA+e90wfEEoWpgqYQNIkQMKeW0mJP+CzuffIfwSzsCgYB8r48TXYrIgk1WAzYmw3xCqoEG4/WfnkolTTqFoDL8BwevgJKRdNkFSupqzD21dc4JIpNNBbvFs9amJD8zi1Ntv5s826YaZFHPQqVcDAuiwuRiBmETqYr9Wy1V60q2+6YjXFda6Zm0FevGIqVE9UGVLPoxopK1C/r8TiEa5hbUwg==-----END RSA PRIVATE KEY-----",
+#     "public_key": "-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0CIQhkdwM0e0ihx8E2tabVBUxvuCfLGiMe+v+h1jCpzkoyyqs0hMCCskKHfGx3O4NqxYtf57ySwEMD2PEC8py7v+YGOVgcUPiDel4V8E/9VMYxkbqhfCTykN/aER5Zh5z0WKrADcnQdknNXHcr3847HZVVNRk2ImfexAjG5TgQqUcKvTTtvoy16gD7qycqRTMifBoM78S/rI6Avd98zKEUvnUkkONSOtAYWoz1TTDECIjRs4/p6p7pGOp/vEXvMlXs8Fdcy/A4BrsBQN1R4VcQmWygO+eAYnKfxu48XO6NoFCNzDF+cicAf0uKF/PD2CAHsoFc5Qq+bOpYWsBGz1+QIDAQAB-----END PUBLIC KEY-----"})
+#     assert response.status_code == 201
+#     assert response.json() == {"message" : "Key set"}
