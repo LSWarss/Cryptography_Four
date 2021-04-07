@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from encryptions.symetric import Symmetric
 from encryptions.asymetric import Assymetric
-from utility import tags_metadata, Message, Keys, error_messages
+from utility import tags_metadata, Message, Keys, error_messages, MessageWithSignature
 
 symetric = None
 assymetric = None
@@ -97,10 +97,10 @@ async def set_assymetric_key(keys: Keys):
     global assymetric
     assymetric = Assymetric()
     assymetric.set_keys(keys.private_key, keys.public_key)
-    return {"message": "Keys set"}
-
+    return {"message": "Keys set"} 
+ 
 @app.post("/asymmetric/verify", tags=["Post Methods","Assymetric Methods"],  status_code=202)
-async def post_assymetric_verify(message : Message):
+async def post_assymetric_verify(message : MessageWithSignature):
     """ Using the most recent setting of the key, verify if the message was signed by the key
 
     Args:
@@ -109,7 +109,7 @@ async def post_assymetric_verify(message : Message):
     Returns:
         [type]: [description]
     """
-    return {"message" : "It was encoded with set key"}
+    return assymetric.verify(message.signature, message.value) if assymetric != None else error_messages["Key not set"]
 
 @app.post("/asymmetric/sign", tags=["Post Methods","Assymetric Methods"],  status_code=202)
 async def post_assymetric_sign(message : Message):

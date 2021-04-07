@@ -4,6 +4,9 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.serialization import load_pem_public_key, load_pem_private_key
+from cryptography.exceptions import InvalidSignature
+
+import base64
 
 class Assymetric():
     
@@ -133,11 +136,12 @@ class Assymetric():
             message (str): Message to sign
             
         """
-        return self.privateKey.sign(
+       
+        return base64.b64encode(self.privateKey.sign(
             bytes(message, 'utf-8'),
             padding.PSS(
                 mgf=padding.MGF1(hashes.SHA256()),
                 salt_length=padding.PSS.MAX_LENGTH
             ),
             hashes.SHA256()
-        ) if self.privateKey != None else "Private key not set, please set the key :)"
+        )) if self.privateKey != None else "Private key not set, please set the key :)"
