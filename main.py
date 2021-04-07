@@ -102,7 +102,7 @@ async def post_assymetric_verify(message : MessageWithSignature):
         message (Message): Message to verify
 
     """
-    return assymetric.verify(message.signature, message.value) if assymetric != None else error_messages["Key not set"]
+    return {"signed": assymetric.verify(message.signature, message.value) } if assymetric != None else error_messages["Key not set"]
 
 @app.post("/asymmetric/sign", tags=["Post Methods","Assymetric Methods"],  status_code=202)
 async def post_assymetric_sign(message : Message):
