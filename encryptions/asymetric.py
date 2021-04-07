@@ -29,8 +29,8 @@ class Assymetric():
             private_pem_key ([pem]): Private key
             public_pem_key ([pem]): Public key
         """
-        self.privateKey = load_pem_private_key(private_pem_key, password=None, backend=default_backend())
-        self.publicKey = load_pem_public_key(public_pem_key)
+        self.privateKey = load_pem_private_key('\n'.join(private_pem_key.splitlines()[1:-1]), password=None, backend=default_backend())
+        self.publicKey = load_pem_public_key('\n'.join(public_pem_key.splitlines()[1:-1]))
 
     def generate_keys(self):
         """Generates keys, sets for class and returns in OpenSSL format
@@ -68,8 +68,8 @@ class Assymetric():
         private_key = rsa.generate_private_key(
         public_exponent=65537,
         key_size=2048,
-        backend=default_backend()
-        )
+        backend=default_backend())
+
         ssh = private_key.private_bytes(
             encoding=serialization.Encoding.PEM,
             format=serialization.PrivateFormat.OpenSSH,
