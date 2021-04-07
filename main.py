@@ -69,8 +69,7 @@ async def post_symmetric_decode(message : Message):
 async def get_assymetric_key():
     """ Returns new public and private key in HEX and sets it up on server
 
-    Returns:
-        [type]: [description]
+
     """
     global assymetric
     assymetric = Assymetric()
@@ -81,8 +80,6 @@ async def get_assymetric_key():
 async def get_assymetric_ssh_key():
     """ Returns public and private key in OpenSSH format
 
-    Returns:
-        [type]: [description]
     """
     keys = Assymetric.generate_ssh_keys()
     return {"Private key": keys["Private key"], "Public key": keys["Public key"]}
@@ -91,8 +88,6 @@ async def get_assymetric_ssh_key():
 async def set_assymetric_key(keys: Keys):
     """Sets key on server 
 
-    Returns:
-        [type]: [description]
     """
     global assymetric
     assymetric = Assymetric()
@@ -106,8 +101,6 @@ async def post_assymetric_verify(message : MessageWithSignature):
     Args:
         message (Message): Message to verify
 
-    Returns:
-        [type]: [description]
     """
     return assymetric.verify(message.signature, message.value) if assymetric != None else error_messages["Key not set"]
 
@@ -118,8 +111,6 @@ async def post_assymetric_sign(message : Message):
     Args:
         message (Message): Message to sign
 
-    Returns:
-        [type]: [description]
     """
     return {"message" : assymetric.sign(message.value)} if assymetric != None else error_messages["Key not set"]
 
@@ -130,8 +121,6 @@ async def post_assymetric_encode(message : Message):
    Args:
         message (Message): Message to encode
 
-    Returns:
-        [type]: [description]
     """
     return {"message" : assymetric.encrypt(message.value)} if assymetric != None else error_messages["Key not set"]
 
@@ -142,7 +131,5 @@ async def post_assymetric_decode(message : Message):
     Args:
         message (Message): Message to decode
 
-    Returns:
-        [type]: [description]
     """
     return {"message" : assymetric.decrypt(message.value)} if assymetric != None else error_messages["Key not set"]
